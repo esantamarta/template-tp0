@@ -98,7 +98,13 @@ public class RegExGenerator {
 
     private String generateLiteral(String expression, int index) {
 
-        char specialChar = expression.charAt(index + 1);
+        char specialChar;
+        if (index < expression.length() - 1) {
+            specialChar = expression.charAt(index + 1);
+        }
+        else {
+            specialChar = expression.charAt(index);
+        }
         int randomChar = ThreadLocalRandom.current().nextInt(32, 256);
         String randomString = Character.toString((char) randomChar);
 
@@ -152,12 +158,12 @@ public class RegExGenerator {
                     else {
                         return workExp.indexOf(']', pos);
                     }
-                case '/':
-                    if (this.isQuantifier(workExp.charAt(pos + 2))) {
-                        return pos + 3;
+                case '\\':
+                    if (this.isQuantifier(workExp.charAt(pos + 1))) {
+                        return pos + 2;
                     }
                     else {
-                        return pos + 2;
+                        return pos + 1;
                     }
                 default:
                     if (this.isQuantifier(workExp.charAt(pos + 1))) {
