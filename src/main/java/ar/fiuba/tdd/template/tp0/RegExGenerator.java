@@ -50,7 +50,7 @@ public class RegExGenerator {
     private String quantifierZeroOrOne(String expression) {
 
         int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
-        int randomIndex = ThreadLocalRandom.current().nextInt(0, expression.length() + 1);
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, expression.length());
         if (randomNumber == 0) {
             return "";
         }
@@ -59,17 +59,14 @@ public class RegExGenerator {
         }
     }
 
-    private String quantifierZeroToMany(String expression) {
+    private String quantifierZeroOrMany(String expression) {
 
-        String chooseString = " ";
-        chooseString = chooseString + expression;
-
-        return this.getReturnString(chooseString);
+        return this.getReturnStringZeroOrMany(expression);
     }
 
-    private String quantifierOneToMany(String expression) {
+    private String quantifierOneOrMany(String expression) {
 
-        return this.getReturnString(expression);
+        return this.getReturnStringOneOrMany(expression);
     }
 
     private String generateRandomChar(String expression, int index) {
@@ -79,7 +76,7 @@ public class RegExGenerator {
         if (index < expression.length() - 1) {
             return this.manageQuantifier(expression.charAt(index + 1),randomChar,randomChar);
         }
-        else{
+        else {
             return randomChar;
         }
 
@@ -96,7 +93,6 @@ public class RegExGenerator {
             quant = expression.charAt(indexFin);
         }
         int randomInt = ThreadLocalRandom.current().nextInt(0, workExpression.length());
-//        String randomString = Character.toString((char) randomInt);
         String randomString = workExpression.substring(randomInt,randomInt + 1);
 
         return this.manageQuantifier(quant,workExpression,randomString);
@@ -112,15 +108,13 @@ public class RegExGenerator {
         else {
             specialChar = expression.charAt(index);
         }
-//      int randomChar = ThreadLocalRandom.current().nextInt(32, 256);
-//      String randomString = Character.toString((char) randomChar);
         String thisChar = expression.substring(index, index + 1);
 
         switch (specialChar) {
             case '+':
-                return this.quantifierOneToMany(thisChar);
+                return this.quantifierOneOrMany(thisChar);
             case '*':
-                return this.quantifierZeroToMany(thisChar);
+                return this.quantifierZeroOrMany(thisChar);
             case '?':
                 return this.quantifierZeroOrOne(thisChar);
             default:
@@ -132,9 +126,9 @@ public class RegExGenerator {
     private String manageQuantifier(char specialChar, String toWork, String defaultString) {
         switch (specialChar) {
             case '+':
-                return this.quantifierOneToMany(toWork);
+                return this.quantifierOneOrMany(toWork);
             case '*':
-                return this.quantifierZeroToMany(toWork);
+                return this.quantifierZeroOrMany(toWork);
             case '?':
                 return this.quantifierZeroOrOne(toWork);
             default:
@@ -142,17 +136,18 @@ public class RegExGenerator {
         }
     }
 
-    private String getReturnString(String characters) {
-
-        StringBuffer buffer = new StringBuffer();
+    private String getReturnStringZeroOrMany(String characters) {
 
         int randomMax = ThreadLocalRandom.current().nextInt(0, this.maxLength + 1);
-        int randomIndex = ThreadLocalRandom.current().nextInt(0, characters.length());
-        for (int i = 0; i < randomMax; i++) {
-            buffer.append(characters.substring(randomIndex,randomIndex + 1));
-        }
 
-        return buffer.toString();
+        return this.buffering(randomMax, characters);
+    }
+
+    private String getReturnStringOneOrMany(String str) {
+
+        int max = ThreadLocalRandom.current().nextInt(1, this.maxLength + 1);
+
+        return this.buffering(max, str);
     }
 
     private int getNextIndex(String workExp, int pos) {
@@ -194,13 +189,24 @@ public class RegExGenerator {
         }
     }
 
-    private boolean isQuantifier(char q) {
+    private boolean isQuantifier(char quant) {
 
-        if (q == '+' || q == '*' || q == '?') {
+        if (quant == '+' || quant == '*' || quant == '?') {
             return true;
         }
         else {
             return false;
         }
+    }
+
+    private String buffering(int maxLength, String toBuffer) {
+        StringBuffer bufferig = new StringBuffer();
+
+        int index = ThreadLocalRandom.current().nextInt(0, toBuffer.length());
+        for (int i = 0; i < maxLength; i++) {
+            bufferig.append(toBuffer.substring(index,index + 1));
+        }
+
+        return bufferig.toString();
     }
 }

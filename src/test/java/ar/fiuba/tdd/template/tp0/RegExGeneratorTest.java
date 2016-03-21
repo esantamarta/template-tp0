@@ -27,7 +27,7 @@ public class RegExGeneratorTest {
 
     @Test
     public void testAnyCharacter() {
-           assertTrue(validate(".", 1));
+        assertTrue(validate(".", 1));
     }
 
     @Test
@@ -60,5 +60,60 @@ public class RegExGeneratorTest {
         assertTrue(validate("[abc]+", 1));
     }
 
-    // TODO: Add more tests!!!
+    @Test
+    public void testCharacterSetWithQuantifierZeroOrOne() {
+        assertTrue(validate("[abc]?", 1));
+    }
+
+    @Test
+    public void testCharacterSetWithQuantifierZeroOrMany() {
+        assertTrue(validate("[abc]*", 1));
+    }
+
+    @Test
+    public void testLiteralWithQuantifierOneOrMany() {
+        assertTrue(validate("h+",1));
+    }
+
+    @Test
+    public void testLiteralWithQuantifierZeroOrOne() {
+        assertTrue(validate("v?",1));
+    }
+
+    @Test
+    public void testLiteralWithQuantifierZeroOrMany() {
+        assertTrue(validate("Z*",1));
+    }
+
+    @Test
+    public void testAnyCharacterWithQuantifierZeroOrOne() {
+        assertTrue(validate(".?", 1));
+    }
+
+    @Test
+    public void testAnyCharacterWithQuantifierZeroOrMany() {
+        assertTrue(validate(".*", 1));
+    }
+
+    @Test
+    public void testAnyCharacterWithQuantifierOneOrMany() {
+        assertTrue(validate(".+", 1));
+    }
+
+    @Test
+    public void testMultipleCharactersWithQuantifierZeroOrOne() {
+        assertTrue(validate("...?", 1));
+    }
+
+    @Test
+    public void testMultipleCharactersWithQuantifierZeroOrMany() {
+        assertTrue(validate("...*", 1));
+    }
+
+    @Test
+    public void testMultipleCharactersWithQuantifierOneOrMany() {
+        assertTrue(validate("...+", 1));
+    }
+
+
 }
