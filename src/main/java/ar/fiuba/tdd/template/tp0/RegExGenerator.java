@@ -87,10 +87,17 @@ public class RegExGenerator {
 
     private String generateRandomCharSet(String expression, int indexIni, int indexFin) {
 
-        String workExpression = expression.substring(indexIni,indexFin);
-        char quant = expression.charAt(indexFin + 1);
-        int randomInt = ThreadLocalRandom.current().nextInt(0, workExpression.length() + 1);
-        String randomString = Character.toString((char) randomInt);
+        String workExpression = expression.substring(indexIni + 1,indexFin);
+        char quant;
+        if (indexFin < expression.length() - 1) {
+            quant = expression.charAt(indexFin + 1);
+        }
+        else {
+            quant = expression.charAt(indexFin);
+        }
+        int randomInt = ThreadLocalRandom.current().nextInt(0, workExpression.length());
+//        String randomString = Character.toString((char) randomInt);
+        String randomString = workExpression.substring(randomInt,randomInt + 1);
 
         return this.manageQuantifier(quant,workExpression,randomString);
 
@@ -140,7 +147,7 @@ public class RegExGenerator {
         StringBuffer buffer = new StringBuffer();
 
         int randomMax = ThreadLocalRandom.current().nextInt(0, this.maxLength + 1);
-        int randomIndex = ThreadLocalRandom.current().nextInt(0, characters.length() + 1);
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, characters.length());
         for (int i = 0; i < randomMax; i++) {
             buffer.append(characters.substring(randomIndex,randomIndex + 1));
         }
@@ -153,7 +160,14 @@ public class RegExGenerator {
             char actualChar = workExp.charAt(pos);
             switch (actualChar) {
                 case '[':
-                    if (this.isQuantifier(workExp.charAt(pos + 1))) {
+                    char q;
+                    if (workExp.indexOf(']', pos) < workExp.length() - 1) {
+                        q = workExp.charAt(workExp.indexOf(']', pos) + 1);
+                    }
+                    else {
+                        q = workExp.charAt(workExp.indexOf(']', pos));
+                    }
+                    if (this.isQuantifier(q)) {
                         return workExp.indexOf(']', pos) + 1;
                     }
                     else {
