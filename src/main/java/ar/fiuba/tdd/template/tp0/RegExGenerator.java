@@ -105,16 +105,17 @@ public class RegExGenerator {
         else {
             specialChar = expression.charAt(index);
         }
-        int randomChar = ThreadLocalRandom.current().nextInt(32, 256);
-        String randomString = Character.toString((char) randomChar);
+//      int randomChar = ThreadLocalRandom.current().nextInt(32, 256);
+//      String randomString = Character.toString((char) randomChar);
+        String thisChar = expression.substring(index, index + 1);
 
         switch (specialChar) {
             case '+':
-                return this.quantifierOneToMany(randomString);
+                return this.quantifierOneToMany(thisChar);
             case '*':
-                return this.quantifierZeroToMany(randomString);
+                return this.quantifierZeroToMany(thisChar);
             case '?':
-                return this.quantifierZeroOrOne(randomString);
+                return this.quantifierZeroOrOne(thisChar);
             default:
                 return expression.substring(index, index + 1);
         }
